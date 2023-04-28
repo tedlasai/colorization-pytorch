@@ -25,7 +25,7 @@ if __name__ == '__main__':
     opt.batch_size = 1  # test code only supports batch_size = 1
     opt.display_id = -1  # no visdom display
     opt.phase = 'val'
-    opt.dataroot = './dataset/ilsvrc2012/%s/' % opt.phase
+    opt.dataroot = '/home/tedlasai/colorization-pytorch/dataset/val'# % opt.phase
     opt.serial_batches = True
     opt.aspect_ratio = 1.
 
@@ -51,19 +51,21 @@ if __name__ == '__main__':
         data_raw[0] = data_raw[0].cuda()
         data_raw[0] = util.crop_mult(data_raw[0], mult=8)
 
+        print("ON IMAGE I:", i)
+
         # with no points
         for (pp, sample_p) in enumerate(sample_ps):
-            img_path = [string.replace('%08d_%.3f' % (i, sample_p), '.', 'p')]
+            img_path = [str.replace('%08d_%.3f' % (i, sample_p), '.', 'p')]
             data = util.get_colorization_data(data_raw, opt, ab_thresh=0., p=sample_p)
 
             model.set_input(data)
             model.test(True)  # True means that losses will be computed
             visuals = util.get_subset_dict(model.get_current_visuals(), to_visualize)
-
             psnrs[i, pp] = util.calculate_psnr_np(util.tensor2im(visuals['real']), util.tensor2im(visuals['fake_reg']))
             entrs[i, pp] = model.get_current_losses()['G_entr']
 
             save_images(webpage, visuals, img_path, aspect_ratio=opt.aspect_ratio, width=opt.display_winsize)
+            print("PSNR", psnrs[i,pp])
 
         if i % 5 == 0:
             print('processing (%04d)-th image... %s' % (i, img_path))
@@ -81,4 +83,4 @@ if __name__ == '__main__':
     entrs_std = np.std(entrs, axis=0) / np.sqrt(opt.how_many)
 
     for (pp, sample_p) in enumerate(sample_ps):
-        print('p=%.3f: %.2f+/-%.2f' % (sample_p, psnrs_mean[pp], psnrs_std[pp]))
+        print('p=%5.3f: %5.2f+/-%5.2f' % (sample_p, psnrs_mean[pp], psnrs_std[pp]))
