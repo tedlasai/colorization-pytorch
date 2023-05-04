@@ -204,8 +204,12 @@ def get_colorization_data(data_raw, opt, ab_thresh=5., p=.125, num_points=None):
         # print('Removed %i points'%torch.sum(mask==0).numpy())
         if(torch.sum(mask)==0):
             return None
+    
+    #CHANGE CODE HERE
+    data['mask_B'] = #uniform grid 
+    data['hint_B'] = #2 channel color hint image (everything that is not a hint is 0)
 
-    return add_color_patches_rand_gt(data, opt, p=p, num_points=num_points)
+    return data #add_color_patches_rand_gt(data, opt, p=p, num_points=num_points)
 
 def add_color_patches_rand_gt(data,opt,p=.125,num_points=None,use_avg=True,samp='normal'):
 # Add random color points sampled from ground truth based on:
@@ -232,7 +236,7 @@ def add_color_patches_rand_gt(data,opt,p=.125,num_points=None,use_avg=True,samp=
             if(not cont_cond): # skip out of loop if condition not met
                 continue
 
-            P = np.random.choice(opt.sample_Ps) # patch size
+            P = 1 # patch size
 
             # sample location
             if(samp=='normal'): # geometric distribution
@@ -242,13 +246,7 @@ def add_color_patches_rand_gt(data,opt,p=.125,num_points=None,use_avg=True,samp=
                 h = np.random.randint(H-P+1)
                 w = np.random.randint(W-P+1)
 
-            # add color point
-            if(use_avg):
-                # embed()
-                data['hint_B'][nn,:,h:h+P,w:w+P] = torch.mean(torch.mean(data['B'][nn,:,h:h+P,w:w+P],dim=2,keepdim=True),dim=1,keepdim=True).view(1,C,1,1)
-            else:
-                data['hint_B'][nn,:,h:h+P,w:w+P] = data['B'][nn,:,h:h+P,w:w+P]
-
+            data['hint_B'][nn,:,h:h+P,w:w+P] = data['B'][nn,:,h:h+P,w:w+P]
             data['mask_B'][nn,:,h:h+P,w:w+P] = 1
 
             # increment counter
@@ -271,8 +269,10 @@ def crop_mult(data,mult=16,HWmax=[800,1200]):
     H,W = data.shape[2:]
     Hnew = int(min(H/mult*mult,HWmax[0]))
     Wnew = int(min(W/mult*mult,HWmax[1]))
-    h = (H-Hnew)/2
-    w = (W-Wnew)/2
+    h = (H-Hnew)//2
+    w = (W-Wnew)//2
+
+    print("H", h, "W", w)
 
     return data[:,:,h:h+Hnew,w:w+Wnew]
 

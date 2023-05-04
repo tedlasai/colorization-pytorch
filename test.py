@@ -25,7 +25,7 @@ if __name__ == '__main__':
     opt.batch_size = 1  # test code only supports batch_size = 1
     opt.display_id = -1  # no visdom display
     opt.phase = 'val'
-    opt.dataroot = '/home/tedlasai/colorization-pytorch/dataset/val'# % opt.phase
+    opt.dataroot = '/home/tedlasai/colorization-pytorch/dataset/ilsvrc2012/val'# % opt.phase
     opt.serial_batches = True
     opt.aspect_ratio = 1.
 

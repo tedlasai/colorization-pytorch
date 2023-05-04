@@ -48,7 +48,7 @@ class BaseOptions():
         parser.add_argument('--ab_quant', type=float, default=10., help='quantization factor')
         parser.add_argument('--l_norm', type=float, default=100., help='colorization normalization factor')
         parser.add_argument('--l_cent', type=float, default=50., help='colorization centering factor')
-        parser.add_argument('--mask_cent', type=float, default=.5, help='mask centering factor')
+        parser.add_argument('--mask_cent', type=float, default=0.5, help='mask centering factor')
         parser.add_argument('--sample_p', type=float, default=1.0, help='sampling geometric distribution, 1.0 means no hints')
         parser.add_argument('--sample_Ps', type=int, nargs='+', default=[1, 2, 3, 4, 5, 6, 7, 8, 9, ], help='patch sizes')
 
@@ -56,7 +56,7 @@ class BaseOptions():
         parser.add_argument('--classification', action='store_true', help='backprop trunk using classification, otherwise use regression')
         parser.add_argument('--phase', type=str, default='val', help='train_small, train, val, test, etc')
         parser.add_argument('--which_epoch', type=str, default='latest', help='which epoch to load? set to latest to use latest cached model')
-        parser.add_argument('--how_many', type=int, default=200, help='how many test images to run')
+        parser.add_argument('--how_many', type=int, default=1000, help='how many test images to run')
         parser.add_argument('--aspect_ratio', type=float, default=1.0, help='aspect ratio of result images')
 
         parser.add_argument('--load_model', action='store_true', help='load the latest model')

@@ -5,27 +5,29 @@ import numpy as np
 import argparse
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument('--in_path', type=str, default='/data/big/dataset/ILSVRC2012')
+parser.add_argument('--in_path', type=str, default='/home/tedlasai/colorization-pytorch/dataset/imagenet_val_full/')
 parser.add_argument('--out_path', type=str, default='./dataset/ilsvrc2012/')
 
 opt = parser.parse_args()
 orig_path = opt.in_path
 print('Copying ILSVRC from...[%s]' % orig_path)
 
-# Copy over part of training set (for initializer)
-trn_small_path = os.path.join(opt.out_path, 'train_small')
-util.mkdirs(opt.out_path)
-util.mkdirs(trn_small_path)
-train_subdirs = os.listdir(os.path.join(opt.in_path, 'train'))
-for train_subdir in train_subdirs[:10]:
-    os.symlink(os.path.join(opt.in_path, 'train', train_subdir), os.path.join(trn_small_path, train_subdir))
-print('Making small training set in...[%s]' % trn_small_path)
+# cp -r /home/m2kowal/data/imagenet/val/*/*.JPEG ./dataset/s 
 
-# Copy over whole training set
-trn_path = os.path.join(opt.out_path, 'train')
-util.mkdirs(opt.out_path)
-os.symlink(os.path.join(opt.in_path, 'train'), trn_path)
-print('Making training set in...[%s]' % trn_path)
+# # Copy over part of training set (for initializer)
+# trn_small_path = os.path.join(opt.out_path, 'train_small')
+# util.mkdirs(opt.out_path)
+# util.mkdirs(trn_small_path)
+# train_subdirs = os.listdir(os.path.join(opt.in_path, 'train'))
+# for train_subdir in train_subdirs[:10]:
+#     os.symlink(os.path.join(opt.in_path, 'train', train_subdir), os.path.join(trn_small_path, train_subdir))
+# print('Making small training set in...[%s]' % trn_small_path)
+
+# # Copy over whole training set
+# trn_path = os.path.join(opt.out_path, 'train')
+# util.mkdirs(opt.out_path)
+# os.symlink(os.path.join(opt.in_path, 'train'), trn_path)
+# print('Making training set in...[%s]' % trn_path)
 
 # Copy over subset of ILSVRC12 val set for colorization val set
 val_path = os.path.join(opt.out_path, 'val/imgs')
